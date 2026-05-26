@@ -1,0 +1,23 @@
+---
+description: Push project changes to GitHub after every update
+alwaysApply: true
+---
+
+# Sync changes to GitHub
+
+After making any code or project changes in this repo, commit and push to the remote:
+
+- Remote: `https://github.com/Tejas-495/Expense-Tracker.git`
+- Branch: `main`
+
+## Workflow
+
+1. Run `git status` and `git diff` to review changes.
+2. Stage relevant files (never commit secrets like `.env`).
+3. Commit with a clear message describing **why** the change was made.
+4. Run `git push origin main`.
+5. Confirm with `git status` that the branch is up to date with `origin/main`.
+
+Do this at the end of the task whenever files were modified, unless the user explicitly says not to push.
+
+If push fails (auth, network), report the error and tell the user what to fix; do not skip the attempt.

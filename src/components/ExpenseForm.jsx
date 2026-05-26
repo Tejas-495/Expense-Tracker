@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { getCurrentMonthKey } from '../utils/month'
 
-function ExpenseForm({ onAddExpense }) {
+function ExpenseForm({ onAddExpense, monthLabel }) {
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
 
@@ -18,6 +19,7 @@ function ExpenseForm({ onAddExpense }) {
       id: Date.now(),
       title: trimmedTitle,
       amount: parsedAmount,
+      monthKey: getCurrentMonthKey(),
     })
 
     setTitle('')
@@ -29,7 +31,10 @@ function ExpenseForm({ onAddExpense }) {
       onSubmit={handleSubmit}
       className="mb-8 rounded-2xl border border-slate-700/80 bg-slate-800/60 p-5 shadow-lg shadow-black/20 sm:p-6"
     >
-      <h2 className="mb-4 text-lg font-semibold text-white">Add expense</h2>
+      <h2 className="mb-1 text-lg font-semibold text-white">Add expense</h2>
+      <p className="mb-4 text-sm text-slate-400">
+        Saved for {monthLabel}
+      </p>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
