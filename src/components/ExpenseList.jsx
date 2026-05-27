@@ -1,6 +1,6 @@
 import ExpenseCard from './ExpenseCard'
 
-function ExpenseList({ expenses, monthLabel, onDeleteExpense }) {
+function ExpenseList({ expenses, monthLabel, onAddToExpense, onDeleteExpense }) {
   if (expenses.length === 0) {
     return (
       <p className="rounded-2xl border border-dashed border-slate-600 bg-slate-800/30 py-12 text-center text-slate-400">
@@ -17,7 +17,11 @@ function ExpenseList({ expenses, monthLabel, onDeleteExpense }) {
       <ul className="grid gap-3 sm:grid-cols-2">
         {expenses.map((expense) => (
           <li key={expense.id}>
-            <ExpenseCard expense={expense} onDelete={onDeleteExpense} />
+            <ExpenseCard
+              expense={expense}
+              onAddAmount={onAddToExpense}
+              onDelete={onDeleteExpense}
+            />
           </li>
         ))}
       </ul>

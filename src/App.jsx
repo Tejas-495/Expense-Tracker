@@ -32,6 +32,16 @@ function App() {
     setExpenses((prev) => prev.filter((expense) => expense.id !== id))
   }
 
+  function handleAddToExpense(id, amountToAdd) {
+    setExpenses((prev) =>
+      prev.map((expense) =>
+        expense.id === id
+          ? { ...expense, amount: expense.amount + amountToAdd }
+          : expense,
+      ),
+    )
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 sm:px-6 sm:py-12">
       <main className="mx-auto max-w-3xl">
@@ -43,6 +53,7 @@ function App() {
         <ExpenseList
           expenses={monthlyExpenses}
           monthLabel={monthLabel}
+          onAddToExpense={handleAddToExpense}
           onDeleteExpense={handleDeleteExpense}
         />
       </main>
