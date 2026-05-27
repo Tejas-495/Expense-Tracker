@@ -18,7 +18,7 @@ function ExpenseList({
 
   return (
     <section>
-      <h2 className="mb-4 text-lg font-semibold text-white">
+      <h2 className="mb-4 text-xl font-bold tracking-tight text-white">
         {monthLabel} ({expenses.length})
       </h2>
       <ul className="grid gap-3 sm:grid-cols-2">

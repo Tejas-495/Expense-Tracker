@@ -56,7 +56,7 @@ function ExpenseCard({ expense, categories, onUpdateCategory, onAddAmount, onDel
     <article className="rounded-2xl border border-slate-700/80 bg-slate-800/60 p-4 shadow-md shadow-black/10 transition hover:border-slate-600 sm:p-5">
       <div className="flex items-center justify-between gap-4">
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-lg font-semibold text-white">
+          <h3 className="truncate text-lg font-bold tracking-tight text-white">
             {expense.title}
           </h3>
           <div className="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -91,7 +91,7 @@ function ExpenseCard({ expense, categories, onUpdateCategory, onAddAmount, onDel
               </div>
             )}
           </div>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs font-medium text-slate-400">
             {formatExpenseDate(expense.createdAt)}
           </p>
           <p className="mt-1 text-xl font-bold text-emerald-400">

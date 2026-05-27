@@ -38,8 +38,8 @@ function ExpenseForm({ onAddExpense, monthLabel }) {
       onSubmit={handleSubmit}
       className="mb-8 rounded-2xl border border-slate-700/80 bg-slate-800/60 p-5 shadow-lg shadow-black/20 sm:p-6"
     >
-      <h2 className="mb-1 text-lg font-semibold text-white">Add expense</h2>
-      <p className="mb-4 text-sm text-slate-400">
+      <h2 className="mb-1 text-xl font-bold tracking-tight text-white">Add expense</h2>
+      <p className="mb-4 text-sm font-medium text-slate-300">
         Saved for {monthLabel}
       </p>
 

@@ -13,7 +13,9 @@ function ExpenseFilters({
 }) {
   return (
     <section className="mb-6 rounded-2xl border border-slate-700/80 bg-slate-800/60 p-5 shadow-lg shadow-black/20 sm:p-6">
-      <h2 className="mb-4 text-lg font-semibold text-white">Search & filters</h2>
+      <h2 className="mb-4 text-xl font-bold tracking-tight text-white">
+        Search & filters
+      </h2>
       <div className="grid gap-3 sm:grid-cols-2">
         <input
           type="text"
