@@ -21,6 +21,9 @@ function ExpenseCard({ expense, onAddAmount, onDelete }) {
           <h3 className="truncate text-lg font-semibold text-white">
             {expense.title}
           </h3>
+          <p className="mt-1 inline-flex rounded-full border border-violet-500/40 bg-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-300">
+            {expense.category}
+          </p>
           <p className="mt-1 text-xl font-bold text-emerald-400">
             {formatInr(expense.amount)}
           </p>

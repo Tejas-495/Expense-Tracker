@@ -1,4 +1,5 @@
 import { initialExpenses } from '../data/initialExpenses'
+import { detectExpenseCategory, isValidCategory } from './category'
 import { getCurrentMonthKey } from './month'
 
 const STORAGE_KEY = 'expense-tracker-expenses'
@@ -11,6 +12,8 @@ function isValidExpense(expense) {
     typeof expense.title === 'string' &&
     typeof expense.amount === 'number' &&
     expense.amount > 0 &&
+    typeof expense.category === 'string' &&
+    isValidCategory(expense.category) &&
     typeof expense.monthKey === 'string' &&
     MONTH_KEY_PATTERN.test(expense.monthKey)
   )
@@ -24,10 +27,17 @@ function migrateExpense(expense) {
     typeof expense.amount === 'number' &&
     expense.amount > 0
   ) {
-    if (typeof expense.monthKey === 'string' && MONTH_KEY_PATTERN.test(expense.monthKey)) {
-      return expense
-    }
-    return { ...expense, monthKey: getCurrentMonthKey() }
+    const monthKey =
+      typeof expense.monthKey === 'string' && MONTH_KEY_PATTERN.test(expense.monthKey)
+        ? expense.monthKey
+        : getCurrentMonthKey()
+
+    const category =
+      typeof expense.category === 'string' && isValidCategory(expense.category)
+        ? expense.category
+        : detectExpenseCategory(expense.title)
+
+    return { ...expense, monthKey, category }
   }
   return null
 }
