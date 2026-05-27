@@ -75,5 +75,9 @@ export function detectExpenseCategory(title) {
 }
 
 export function isValidCategory(category) {
-  return EXPENSE_CATEGORIES.includes(category)
+  return typeof category === 'string' && category.trim().length > 0
+}
+
+export function normalizeCategory(category) {
+  return category.trim().replace(/\s+/g, ' ')
 }

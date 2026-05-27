@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { detectExpenseCategory } from '../utils/category'
+import { detectExpenseCategory, normalizeCategory } from '../utils/category'
 import { getCurrentMonthKey } from '../utils/month'
 
 function getTodayDate() {
@@ -24,7 +24,7 @@ function ExpenseForm({ onAddExpense, monthLabel }) {
       id: Date.now(),
       title: trimmedTitle,
       amount: parsedAmount,
-      category: detectExpenseCategory(trimmedTitle),
+      category: normalizeCategory(detectExpenseCategory(trimmedTitle)),
       monthKey: getCurrentMonthKey(),
       createdAt: getTodayDate(),
     })

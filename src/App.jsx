@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { loadExpenses, saveExpenses } from './utils/expenseStorage'
-import { EXPENSE_CATEGORIES } from './utils/category'
+import { EXPENSE_CATEGORIES, isValidCategory, normalizeCategory } from './utils/category'
 import {
   filterExpensesByMonth,
   formatMonthLabel,
@@ -21,6 +21,14 @@ function App() {
   const currentMonthKey = getCurrentMonthKey()
   const monthLabel = formatMonthLabel(currentMonthKey)
   const monthlyExpenses = filterExpensesByMonth(expenses, currentMonthKey)
+  const categoryOptions = [
+    ...new Set([
+      ...EXPENSE_CATEGORIES,
+      ...expenses
+        .map((expense) => expense.category)
+        .filter((category) => typeof category === 'string' && category.trim() !== ''),
+    ]),
+  ]
 
   useEffect(() => {
     saveExpenses(expenses)
@@ -78,6 +86,19 @@ function App() {
     )
   }
 
+  function handleUpdateExpenseCategory(id, nextCategory) {
+    if (!isValidCategory(nextCategory)) {
+      return
+    }
+
+    const normalizedCategory = normalizeCategory(nextCategory)
+    setExpenses((prev) =>
+      prev.map((expense) =>
+        expense.id === id ? { ...expense, category: normalizedCategory } : expense,
+      ),
+    )
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 px-4 py-8 sm:px-6 sm:py-12">
       <main className="mx-auto max-w-3xl">
@@ -97,11 +118,13 @@ function App() {
           onMinAmountChange={setMinAmount}
           maxAmount={maxAmount}
           onMaxAmountChange={setMaxAmount}
-          categories={EXPENSE_CATEGORIES}
+          categories={categoryOptions}
         />
         <ExpenseList
           expenses={filteredExpenses}
           monthLabel={monthLabel}
+          categories={categoryOptions}
+          onUpdateExpenseCategory={handleUpdateExpenseCategory}
           onAddToExpense={handleAddToExpense}
           onDeleteExpense={handleDeleteExpense}
         />

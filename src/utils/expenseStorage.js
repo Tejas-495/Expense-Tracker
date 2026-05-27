@@ -1,5 +1,5 @@
 import { initialExpenses } from '../data/initialExpenses'
-import { detectExpenseCategory, isValidCategory } from './category'
+import { detectExpenseCategory, isValidCategory, normalizeCategory } from './category'
 import { getCurrentMonthKey } from './month'
 
 const STORAGE_KEY = 'expense-tracker-expenses'
@@ -52,8 +52,8 @@ function migrateExpense(expense) {
 
     const category =
       typeof expense.category === 'string' && isValidCategory(expense.category)
-        ? expense.category
-        : detectExpenseCategory(expense.title)
+        ? normalizeCategory(expense.category)
+        : normalizeCategory(detectExpenseCategory(expense.title))
 
     const createdAt =
       typeof expense.createdAt === 'string' && DATE_PATTERN.test(expense.createdAt)

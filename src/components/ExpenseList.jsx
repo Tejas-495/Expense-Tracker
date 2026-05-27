@@ -1,6 +1,13 @@
 import ExpenseCard from './ExpenseCard'
 
-function ExpenseList({ expenses, monthLabel, onAddToExpense, onDeleteExpense }) {
+function ExpenseList({
+  expenses,
+  monthLabel,
+  categories,
+  onUpdateExpenseCategory,
+  onAddToExpense,
+  onDeleteExpense,
+}) {
   if (expenses.length === 0) {
     return (
       <p className="rounded-2xl border border-dashed border-slate-600 bg-slate-800/30 py-12 text-center text-slate-400">
@@ -19,6 +26,8 @@ function ExpenseList({ expenses, monthLabel, onAddToExpense, onDeleteExpense }) 
           <li key={expense.id}>
             <ExpenseCard
               expense={expense}
+              categories={categories}
+              onUpdateCategory={onUpdateExpenseCategory}
               onAddAmount={onAddToExpense}
               onDelete={onDeleteExpense}
             />

@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatInr } from '../utils/formatCurrency'
+import { isValidCategory, normalizeCategory } from '../utils/category'
 
 function formatExpenseDate(dateString) {
   const date = new Date(dateString)
@@ -14,8 +15,14 @@ function formatExpenseDate(dateString) {
   })
 }
 
-function ExpenseCard({ expense, onAddAmount, onDelete }) {
+function ExpenseCard({ expense, categories, onUpdateCategory, onAddAmount, onDelete }) {
   const [extraAmount, setExtraAmount] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState(expense.category)
+  const [customCategory, setCustomCategory] = useState('')
+
+  useEffect(() => {
+    setSelectedCategory(expense.category)
+  }, [expense.category])
 
   function handleAddAmount() {
     const parsedAmount = parseFloat(extraAmount)
@@ -27,6 +34,24 @@ function ExpenseCard({ expense, onAddAmount, onDelete }) {
     setExtraAmount('')
   }
 
+  function handleCategoryChange(value) {
+    setSelectedCategory(value)
+    if (value !== '__custom__') {
+      onUpdateCategory(expense.id, value)
+    }
+  }
+
+  function handleSaveCustomCategory() {
+    if (!isValidCategory(customCategory)) {
+      return
+    }
+
+    const normalizedCategory = normalizeCategory(customCategory)
+    onUpdateCategory(expense.id, normalizedCategory)
+    setSelectedCategory(normalizedCategory)
+    setCustomCategory('')
+  }
+
   return (
     <article className="rounded-2xl border border-slate-700/80 bg-slate-800/60 p-4 shadow-md shadow-black/10 transition hover:border-slate-600 sm:p-5">
       <div className="flex items-center justify-between gap-4">
@@ -34,9 +59,38 @@ function ExpenseCard({ expense, onAddAmount, onDelete }) {
           <h3 className="truncate text-lg font-semibold text-white">
             {expense.title}
           </h3>
-          <p className="mt-1 inline-flex rounded-full border border-violet-500/40 bg-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-300">
-            {expense.category}
-          </p>
+          <div className="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center">
+            <select
+              value={selectedCategory}
+              onChange={(e) => handleCategoryChange(e.target.value)}
+              className="rounded-xl border border-slate-600 bg-slate-900 px-2.5 py-1 text-xs font-medium text-violet-200 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+              <option value="__custom__">Custom...</option>
+            </select>
+            {selectedCategory === '__custom__' && (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={customCategory}
+                  onChange={(e) => setCustomCategory(e.target.value)}
+                  placeholder="New category"
+                  className="w-32 rounded-xl border border-slate-600 bg-slate-900 px-2.5 py-1 text-xs text-white placeholder:text-slate-500 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+                />
+                <button
+                  type="button"
+                  onClick={handleSaveCustomCategory}
+                  className="rounded-xl bg-violet-600 px-2.5 py-1 text-xs font-medium text-white transition hover:bg-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-400"
+                >
+                  Save
+                </button>
+              </div>
+            )}
+          </div>
           <p className="mt-1 text-xs text-slate-400">
             {formatExpenseDate(expense.createdAt)}
           </p>
