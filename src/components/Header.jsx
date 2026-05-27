@@ -3,8 +3,13 @@ import { formatInr } from '../utils/formatCurrency'
 function Header({ total, monthLabel }) {
   return (
     <header className="mb-8 text-center">
+      <img
+        src="/hisab-kitab-logo.svg"
+        alt="Hisab Kitab logo"
+        className="mx-auto mb-3 h-14 w-14 rounded-2xl border border-violet-500/40 bg-slate-900/80 p-1.5 shadow-lg shadow-black/30"
+      />
       <p className="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-violet-400">
-        Student Expense Tracker
+        Hisab Kitab
       </p>
       <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-5xl">
         Your spending
