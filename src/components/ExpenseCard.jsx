@@ -1,6 +1,19 @@
 import { useState } from 'react'
 import { formatInr } from '../utils/formatCurrency'
 
+function formatExpenseDate(dateString) {
+  const date = new Date(dateString)
+  if (Number.isNaN(date.getTime())) {
+    return dateString
+  }
+
+  return date.toLocaleDateString('en-IN', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  })
+}
+
 function ExpenseCard({ expense, onAddAmount, onDelete }) {
   const [extraAmount, setExtraAmount] = useState('')
 
@@ -23,6 +36,9 @@ function ExpenseCard({ expense, onAddAmount, onDelete }) {
           </h3>
           <p className="mt-1 inline-flex rounded-full border border-violet-500/40 bg-violet-500/10 px-2.5 py-1 text-xs font-medium text-violet-300">
             {expense.category}
+          </p>
+          <p className="mt-1 text-xs text-slate-400">
+            {formatExpenseDate(expense.createdAt)}
           </p>
           <p className="mt-1 text-xl font-bold text-emerald-400">
             {formatInr(expense.amount)}

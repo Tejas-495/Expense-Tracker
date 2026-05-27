@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { loadExpenses, saveExpenses } from './utils/expenseStorage'
+import { EXPENSE_CATEGORIES } from './utils/category'
 import {
   filterExpensesByMonth,
   formatMonthLabel,
@@ -7,10 +8,16 @@ import {
 } from './utils/month'
 import Header from './components/Header'
 import ExpenseForm from './components/ExpenseForm'
+import ExpenseFilters from './components/ExpenseFilters'
 import ExpenseList from './components/ExpenseList'
 
 function App() {
   const [expenses, setExpenses] = useState(loadExpenses)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedDate, setSelectedDate] = useState('')
+  const [minAmount, setMinAmount] = useState('')
+  const [maxAmount, setMaxAmount] = useState('')
   const currentMonthKey = getCurrentMonthKey()
   const monthLabel = formatMonthLabel(currentMonthKey)
   const monthlyExpenses = filterExpensesByMonth(expenses, currentMonthKey)
@@ -19,7 +26,36 @@ function App() {
     saveExpenses(expenses)
   }, [expenses])
 
-  const total = monthlyExpenses.reduce(
+  const filteredExpenses = monthlyExpenses.filter((expense) => {
+    const normalizedSearch = searchTerm.trim().toLowerCase()
+    const matchesSearch =
+      normalizedSearch === '' ||
+      expense.title.toLowerCase().includes(normalizedSearch)
+
+    const matchesCategory =
+      selectedCategory === '' || expense.category === selectedCategory
+
+    const matchesDate = selectedDate === '' || expense.createdAt === selectedDate
+
+    const parsedMin = minAmount === '' ? null : parseFloat(minAmount)
+    const parsedMax = maxAmount === '' ? null : parseFloat(maxAmount)
+    const validMin =
+      parsedMin === null || Number.isNaN(parsedMin) ? null : parsedMin
+    const validMax =
+      parsedMax === null || Number.isNaN(parsedMax) ? null : parsedMax
+    const matchesMin = validMin === null || expense.amount >= validMin
+    const matchesMax = validMax === null || expense.amount <= validMax
+
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesDate &&
+      matchesMin &&
+      matchesMax
+    )
+  })
+
+  const total = filteredExpenses.reduce(
     (sum, expense) => sum + expense.amount,
     0,
   )
@@ -50,8 +86,21 @@ function App() {
           onAddExpense={handleAddExpense}
           monthLabel={monthLabel}
         />
+        <ExpenseFilters
+          searchTerm={searchTerm}
+          onSearchTermChange={setSearchTerm}
+          selectedCategory={selectedCategory}
+          onSelectedCategoryChange={setSelectedCategory}
+          selectedDate={selectedDate}
+          onSelectedDateChange={setSelectedDate}
+          minAmount={minAmount}
+          onMinAmountChange={setMinAmount}
+          maxAmount={maxAmount}
+          onMaxAmountChange={setMaxAmount}
+          categories={EXPENSE_CATEGORIES}
+        />
         <ExpenseList
-          expenses={monthlyExpenses}
+          expenses={filteredExpenses}
           monthLabel={monthLabel}
           onAddToExpense={handleAddToExpense}
           onDeleteExpense={handleDeleteExpense}

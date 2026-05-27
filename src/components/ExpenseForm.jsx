@@ -2,6 +2,10 @@ import { useState } from 'react'
 import { detectExpenseCategory } from '../utils/category'
 import { getCurrentMonthKey } from '../utils/month'
 
+function getTodayDate() {
+  return new Date().toISOString().split('T')[0]
+}
+
 function ExpenseForm({ onAddExpense, monthLabel }) {
   const [title, setTitle] = useState('')
   const [amount, setAmount] = useState('')
@@ -22,6 +26,7 @@ function ExpenseForm({ onAddExpense, monthLabel }) {
       amount: parsedAmount,
       category: detectExpenseCategory(trimmedTitle),
       monthKey: getCurrentMonthKey(),
+      createdAt: getTodayDate(),
     })
 
     setTitle('')

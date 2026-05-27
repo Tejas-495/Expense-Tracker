@@ -4,6 +4,22 @@ import { getCurrentMonthKey } from './month'
 
 const STORAGE_KEY = 'expense-tracker-expenses'
 const MONTH_KEY_PATTERN = /^\d{4}-\d{2}$/
+const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
+
+function getTodayDate() {
+  return new Date().toISOString().split('T')[0]
+}
+
+function getCreatedAtFromLegacyId(id) {
+  if (typeof id === 'number' && Number.isFinite(id) && id > 1_000_000_000_000) {
+    const date = new Date(id)
+    if (!Number.isNaN(date.getTime())) {
+      return date.toISOString().split('T')[0]
+    }
+  }
+
+  return getTodayDate()
+}
 
 function isValidExpense(expense) {
   return (
@@ -14,6 +30,8 @@ function isValidExpense(expense) {
     expense.amount > 0 &&
     typeof expense.category === 'string' &&
     isValidCategory(expense.category) &&
+    typeof expense.createdAt === 'string' &&
+    DATE_PATTERN.test(expense.createdAt) &&
     typeof expense.monthKey === 'string' &&
     MONTH_KEY_PATTERN.test(expense.monthKey)
   )
@@ -37,7 +55,12 @@ function migrateExpense(expense) {
         ? expense.category
         : detectExpenseCategory(expense.title)
 
-    return { ...expense, monthKey, category }
+    const createdAt =
+      typeof expense.createdAt === 'string' && DATE_PATTERN.test(expense.createdAt)
+        ? expense.createdAt
+        : getCreatedAtFromLegacyId(expense.id)
+
+    return { ...expense, monthKey, category, createdAt }
   }
   return null
 }

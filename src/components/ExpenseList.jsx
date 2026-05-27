@@ -4,7 +4,7 @@ function ExpenseList({ expenses, monthLabel, onAddToExpense, onDeleteExpense }) 
   if (expenses.length === 0) {
     return (
       <p className="rounded-2xl border border-dashed border-slate-600 bg-slate-800/30 py-12 text-center text-slate-400">
-        No expenses for {monthLabel} yet. Add your first one above!
+        No matching expenses for {monthLabel}. Try changing your filters.
       </p>
     )
   }
